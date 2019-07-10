@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+}
+
+body {
+  background-color: #f7f7f7;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Aleo', serif;
+}
+
+@media screen and (max-width: 575.98px) {
+  #addKid {
+      padding-top: 4rem;
+  }
+}
+
