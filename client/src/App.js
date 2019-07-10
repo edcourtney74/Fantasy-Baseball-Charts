@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row } from 'reactstrap';
-import Rank from './components/Rank';
-import StatButton from './components/StatButton';
+import Chart from './components/Chart';
+import CategoryButtons from './components/CategoryButtons';
 import axios from 'axios';
 import './App.css';
 
@@ -10,14 +10,11 @@ class App extends Component {
     super();
     this.state = {
       newData: [],
-      weeks: 0
+      weeks: 0,
+      chartType: "",
     }
   }
-  // Do initial database call - all charts will use this info
-  componentDidMount() {
-    this.getChartData();
-  }
-
+  
   // Initial teams object, structured for ChartJS
   teamData = {
     labels: [],
@@ -121,8 +118,13 @@ class App extends Component {
     ],
   }
 
+  // Do initial database call - all charts will use this info
+  componentDidMount() {
+    this.getChartData();
+  }
+  
   // Initial db call on page load
-  getChartData() {
+  getChartData = () => {
     axios.get('/api/stats')
       .then(response => {
         // Calculate number of weeks of data retrieved - number of records divided by number of teams (16)
@@ -142,16 +144,40 @@ class App extends Component {
       .catch(err => console.log(err));
   } 
 
+  // Function that shows rank chart
+  showRank = () => {
+    console.log("rank clicked");
+    // Set team and counter to 0
+    let team = 0, counter = 0;
+
+    // For loop goes through each database record
+    for (let i = 0; i < this.state.newData.length; i++) {
+        // Records are groups alphabetically by team, so the first team's records will all be in a row. So we need to keep a counter to check when it's time to move to the next team. Once the counter is greater than the number of weeks in the data, we know it's time to move on. Add one to the team counter and reset the other counter.
+        if (counter >= this.state.weeks) {
+            team++;
+            counter = 0;
+        }
+        // Push the rank from the record into the team's data. Advance the counter. 
+        this.teamData.datasets[team].data.push(this.state.newData[i].rank);
+        counter++;
+    }
+    this.setState({
+      chartType: "Rank"
+    })
+}
+
   render() {
     return (
         <Container>
-          <h1>LPH Pythagorean</h1>
-          <StatButton />
-          <Rank
-            teamData={this.teamData}
-            newData={this.state.newData}
-            weeks={this.state.weeks}
+          <h1 className="mt-2">LPH Pythagorean</h1>
+          <CategoryButtons 
+            onClickRank={this.showRank}
           />
+          {this.state.chartType === "Rank" &&
+          <Chart
+            teamData={this.teamData}
+            weeks={this.state.weeks}
+          />}
         </Container>
     )
   };

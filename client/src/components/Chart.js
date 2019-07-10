@@ -8,7 +8,7 @@ class Chart extends Component {
     //         teamData: props.teamData
     //     }
     // }  
-    
+
     static defaultProps = {
         titleText: 'Rank',
         stepSize: 1,
@@ -16,7 +16,6 @@ class Chart extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className="chart">
                 <Line
