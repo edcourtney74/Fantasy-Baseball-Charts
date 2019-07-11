@@ -3,3 +3,8 @@ h1 {
   font-family: inherit;
   font-weight: bold;
 }
+
+h3 {
+  font-family: inherit;
+  text-align: center;
+}

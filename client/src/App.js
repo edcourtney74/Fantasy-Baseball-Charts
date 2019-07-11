@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row } from 'reactstrap';
+import { Container } from 'reactstrap';
 import Chart from './components/Chart';
 import CategoryButtons from './components/CategoryButtons';
 import axios from 'axios';
@@ -145,9 +145,32 @@ class App extends Component {
       .catch(err => console.log(err));
   } 
 
+  // Function that is called when category button is clicked
+  categoryClick = (event) => {
+
+    // Run for loop to empty previous data from teamData
+    for (let i = 0; i < this.teamData.datasets.length; i++) {
+      this.teamData.datasets[i].data = [];
+    }
+
+    // Retrieve id of button to determine which function to call
+    let id = event.target.id
+
+    // Switch statement to determine which function to call/chart to display
+    switch(id) {
+      case "rank":
+        this.showRank()
+        break; 
+      
+      default:
+        break;
+    }
+  }
+
   // Function that shows rank chart
   showRank = () => {
     console.log("rank clicked");
+    
     // Set team and counter to 0
     let team = 0, counter = 0;
 
@@ -165,15 +188,19 @@ class App extends Component {
     this.setState({
       chartType: "Rank"
     })
-}
+  }
 
   render() {
     return (
         <Container>
           <h1 className="mt-2">LPH Pythagorean</h1>
           <CategoryButtons 
-            onClickRank={this.showRank}
+            onClickRank={this.categoryClick}
           />
+          {/* Displays message until user chooses a stat option */}
+          {this.state.chartType === "" && 
+            <h3 className="mt-3">Choose a stat to view</h3>
+          }
           {this.state.chartType === "Rank" &&
           <Chart
             teamData={this.teamData}
