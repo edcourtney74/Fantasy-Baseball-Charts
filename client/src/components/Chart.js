@@ -17,7 +17,7 @@ class Chart extends Component {
 
     render() {
         return (
-            <div className="chart">
+            <div className="chart mt-3">
                 <Line
                     data={this.props.teamData}
                     options={{

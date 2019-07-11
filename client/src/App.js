@@ -139,6 +139,7 @@ class App extends Component {
           newData: response.data,
           weeks
         })
+        console.log(this.state)
       })
       // Call function to show rank chart on page load
       .catch(err => console.log(err));

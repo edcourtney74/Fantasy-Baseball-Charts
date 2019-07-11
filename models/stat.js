@@ -2,7 +2,7 @@
 module.exports = function (sequelize, DataTypes) {
     var Stats = sequelize.define("stats", {
         week: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         rank: {
