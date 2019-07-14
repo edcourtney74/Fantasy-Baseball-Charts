@@ -168,17 +168,25 @@ class App extends Component {
         category = "rank"
         this.showRank()
         break;
-      case "points-for":
+      case "points_for":
         category = "points_for"
         this.showPointsFor()
         break;
-      case "points-against":
+      case "points_against":
         category = "points_against"
         this.showPointsAgainst()
         break;
-      case "exp-wins":
+      case "exp_wins":
         category = "expected_wins"
         this.showExpectedWins()
+        break;
+      case "luck":
+        category = "luck"
+        this.showLuck()
+        break;
+      case "h2h_luck":
+        category = "h2h_luck"
+        this.showH2HLuck()
         break;
       default:
         break;
@@ -237,6 +245,24 @@ class App extends Component {
     this.setState({
       chartType: "Expected Wins",
       stepSize: .5,
+      reverse: false,
+    })
+  }
+  // Function that sets luck properties
+  showLuck = () => {
+    console.log("luck called");
+    this.setState({
+      chartType: "Luck",
+      stepSize: .2,
+      reverse: false,
+    })
+  }
+  // Function that sets H2H luck properties
+  showH2HLuck = () => {
+    console.log("h2h luck called");
+    this.setState({
+      chartType: "H2H Luck",
+      stepSize: .2,
       reverse: false,
     })
   }
