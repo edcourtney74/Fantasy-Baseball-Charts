@@ -6,7 +6,7 @@ class Chart extends Component {
         console.log(this.props)
         return (
             <div className="chart mt-3">
-                {this.props.reverse && (
+                {this.props.reverse ? (
                 <Line
                     data={this.props.teamData}
                     options={{
@@ -30,7 +30,7 @@ class Chart extends Component {
                             }
                         }
                     }}
-                /> )} : (
+                /> ) : (
                 <Line
                     data={this.props.teamData}
                     options={{

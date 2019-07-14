@@ -172,6 +172,14 @@ class App extends Component {
         category = "points_for"
         this.showPointsFor()
         break;
+      case "points-against":
+        category = "points_against"
+        this.showPointsAgainst()
+        break;
+      case "exp-wins":
+        category = "expected_wins"
+        this.showExpectedWins()
+        break;
       default:
         break;
     }
@@ -212,6 +220,26 @@ class App extends Component {
         stepSize: 250
       })
     }
+  
+  // Function that sets points against properties
+  showPointsAgainst = () => {
+    console.log("points-against called");
+    this.setState({
+        chartType: "Points Against",
+        reverse: false,
+        stepSize: 250
+      })
+    }
+
+  // Function that sets expected wins properties
+  showExpectedWins = () => {
+    console.log("expected wins called");
+    this.setState({
+      chartType: "Expected Wins",
+      stepSize: .5,
+      reverse: false,
+    })
+  }
 
   render() {
     return (

@@ -26,15 +26,15 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         expected_wins: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
         luck: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
         h2h_luck: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
     }, {
