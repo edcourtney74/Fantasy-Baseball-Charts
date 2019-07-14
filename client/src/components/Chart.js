@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 
-class Chart extends Component {
-    static defaultProps = {
-        titleText: 'Rank',
-        stepSize: 1,
-        reverse: true,
-    }
-
+class Chart extends Component {  
     render() {
-        console.log(this.props.teamData);
+        console.log(this.props)
         return (
             <div className="chart mt-3">
+                {this.props.reverse && (
                 <Line
                     data={this.props.teamData}
                     options={{
@@ -23,8 +18,8 @@ class Chart extends Component {
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    stepSize: `${this.props.stepSize}`,
-                                    reverse: `${this.props.reverse}`
+                                    reverse: true,
+                                    stepSize: `${this.props.stepSize}`
                                 },
                             }]
                         },
@@ -35,7 +30,31 @@ class Chart extends Component {
                             }
                         }
                     }}
-                />
+                /> )} : (
+                <Line
+                    data={this.props.teamData}
+                    options={{
+                        title: {
+                            display: true,
+                            text: `${this.props.titleText}`,
+                            fontSize: 20
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    reverse: false,
+                                    stepSize: `${this.props.stepSize}`
+                                },
+                            }]
+                        },
+                        elements: {
+                            line: {
+                                fill: false,
+                                tension: 0
+                            }
+                        }
+                    }}
+                /> )}
             </div>
         )
     }
