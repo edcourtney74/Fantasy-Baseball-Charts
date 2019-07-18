@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Container, Row } from 'reactstrap';
 import Chart from './components/Chart';
-import CategoryButtons from './components/CategoryButtons';
 import axios from 'axios';
 import './App.css';
+import CategoryButtons from './components/CategoryButtons';
 import CategoryButtonActive from './components/CategoryButtonActive';
+import HideButton from './components/HideButton';
+import ShowButton from './components/ShowButton';
 
 class App extends Component {
   constructor() {
@@ -15,6 +17,7 @@ class App extends Component {
       chartType: "",
       stepSize: 0,
       reverse: true,
+      hidden: false,
     }
   }
 
@@ -145,7 +148,6 @@ class App extends Component {
           newData: response.data,
           weeks
         })
-        console.log(this.state)
       })
       // Call function to show rank chart on page load
       .catch(err => console.log(err));
@@ -165,31 +167,55 @@ class App extends Component {
     // Category var holds category column to use from database
     let category = "";
 
-    // Switch statement to determine which function to call/chart properties to display
+    // Switch statement to determine which data to display and set state with chart properties
     switch (id) {
       case "Rank":
         category = "rank"
-        this.showRank()
+        this.setState({
+          chartType: "Rank",
+          stepSize: 1,
+          reverse: true,
+        })
         break;
       case "Points For":
         category = "points_for"
-        this.showPointsFor()
+        this.setState({
+          chartType: "Points For",
+          reverse: false,
+          stepSize: 250
+        })
         break;
       case "Points Against":
         category = "points_against"
-        this.showPointsAgainst()
+        this.setState({
+          chartType: "Points Against",
+          reverse: false,
+          stepSize: 250
+        })
         break;
       case "Expected Wins":
         category = "expected_wins"
-        this.showExpectedWins()
+        this.setState({
+          chartType: "Expected Wins",
+          stepSize: .5,
+          reverse: false,
+        })
         break;
       case "Luck":
         category = "luck"
-        this.showLuck()
+        this.setState({
+          chartType: "Luck",
+          stepSize: .2,
+          reverse: false,
+        })
         break;
       case "H2H Luck":
         category = "h2h_luck"
-        this.showH2HLuck()
+        this.setState({
+          chartType: "H2H Luck",
+          stepSize: .2,
+          reverse: false,
+        })
         break;
       default:
         break;
@@ -212,55 +238,25 @@ class App extends Component {
     }
   }
 
-  // Function that sets rank chart properties
-  showRank = () => {
+  // Function to hide all current data so user can focus on just a few teams
+  hideAll = () => {
+    // Use a for loop to add hidden: true property to each team's dataset
+    for (let i = 0; i < this.teamData.datasets.length; i++) {
+      this.teamData.datasets[i].hidden = true;
+    }
     this.setState({
-      chartType: "Rank",
-      stepSize: 1,
-      reverse: true,
+      hidden: true
     })
   }
-  
-  // Function that sets points for properties
-  showPointsFor = () => {
-    this.setState({
-        chartType: "Points For",
-        reverse: false,
-        stepSize: 250
-      })
-    }
-  
-  // Function that sets points against properties
-  showPointsAgainst = () => {
-    this.setState({
-        chartType: "Points Against",
-        reverse: false,
-        stepSize: 250
-      })
-    }
 
-  // Function that sets expected wins properties
-  showExpectedWins = () => {
+  // Function to show all current data so user can all teams again. This
+  showAll = () => {
+    // Use a for loop to add hidden: false property to each team's dataset
+    for (let i = 0; i < this.teamData.datasets.length; i++) {
+      this.teamData.datasets[i].hidden = false;
+    }
     this.setState({
-      chartType: "Expected Wins",
-      stepSize: .5,
-      reverse: false,
-    })
-  }
-  // Function that sets luck properties
-  showLuck = () => {
-    this.setState({
-      chartType: "Luck",
-      stepSize: .2,
-      reverse: false,
-    })
-  }
-  // Function that sets H2H luck properties
-  showH2HLuck = () => {
-    this.setState({
-      chartType: "H2H Luck",
-      stepSize: .2,
-      reverse: false,
+      hidden: false
     })
   }
 
@@ -275,16 +271,24 @@ class App extends Component {
                 onClickCategory={this.categoryClick}
                 id={category}
                 chartType={this.state.chartType}
-              />
-            ) : (
+                key={category}
+              />) : (
               <CategoryButtons 
                 onClickCategory={this.categoryClick}
                 id={category}
                 chartType={this.state.chartType}
-              />
-            )
-          ))}
-        </Row>
+                key={category}
+              />)
+            ))}
+          </Row>
+          <Row className="justify-content-center mt-2">
+            <HideButton 
+              onClickHideAll={this.hideAll}
+            />
+            <ShowButton 
+              onClickShowAll={this.showAll}
+            />
+          </Row>
         {/* Displays message until user chooses a stat option */}
         {!this.state.chartType &&
           <h3 className="mt-3">Choose a stat to view</h3>

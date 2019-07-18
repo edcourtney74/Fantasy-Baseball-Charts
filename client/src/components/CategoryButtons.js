@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Row } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 function CategoryButton(props) {
     return (
