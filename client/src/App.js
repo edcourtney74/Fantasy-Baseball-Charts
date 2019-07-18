@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import Chart from './components/Chart';
 import CategoryButtons from './components/CategoryButtons';
 import axios from 'axios';
@@ -13,7 +13,7 @@ class App extends Component {
       weeks: 0,
       chartType: "",
       stepSize: 0,
-      reverse: true
+      reverse: true,
     }
   }
 
@@ -120,6 +120,9 @@ class App extends Component {
     ],
   }
 
+  // Array of stat categories user can choose from.
+  categoryTitle = ["Rank", "Points For", "Points Against", "Expected Wins", "Luck", "H2H Luck"];
+
   // Do initial database call - all charts will use this info
   componentDidMount() {
     this.getChartData();
@@ -164,27 +167,27 @@ class App extends Component {
 
     // Switch statement to determine which function to call/chart properties to display
     switch (id) {
-      case "rank":
+      case "Rank":
         category = "rank"
         this.showRank()
         break;
-      case "points_for":
+      case "Points For":
         category = "points_for"
         this.showPointsFor()
         break;
-      case "points_against":
+      case "Points Against":
         category = "points_against"
         this.showPointsAgainst()
         break;
-      case "exp_wins":
+      case "Expected Wins":
         category = "expected_wins"
         this.showExpectedWins()
         break;
-      case "luck":
+      case "Luck":
         category = "luck"
         this.showLuck()
         break;
-      case "h2h_luck":
+      case "H2H Luck":
         category = "h2h_luck"
         this.showH2HLuck()
         break;
@@ -271,9 +274,14 @@ class App extends Component {
     return (
       <Container>
         <h1 className="mt-2">LPH Pythagorean</h1>
-        <CategoryButtons
-          onClickCategory={this.categoryClick}
-        />
+        <Row className="justify-content-center mt-4">
+          {this.categoryTitle.map(category => (
+            <CategoryButtons
+              onClickCategory={this.categoryClick}
+              id={category}
+            />
+          ))}
+        </Row>
         {/* Displays message until user chooses a stat option */}
         {!this.state.chartType &&
           <h3 className="mt-3">Choose a stat to view</h3>
