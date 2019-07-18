@@ -11,8 +11,7 @@ class Chart extends Component {
                     data={this.props.teamData}
                     options={{
                         title: {
-                            display: true,
-                            text: `${this.props.titleText}`,
+                            display: false,
                             fontSize: 20
                         },
                         scales: {
@@ -35,8 +34,7 @@ class Chart extends Component {
                     data={this.props.teamData}
                     options={{
                         title: {
-                            display: true,
-                            text: `${this.props.titleText}`,
+                            display: false,
                             fontSize: 20
                         },
                         scales: {

@@ -4,6 +4,7 @@ import Chart from './components/Chart';
 import CategoryButtons from './components/CategoryButtons';
 import axios from 'axios';
 import './App.css';
+import CategoryButtonActive from './components/CategoryButtonActive';
 
 class App extends Component {
   constructor() {
@@ -120,7 +121,7 @@ class App extends Component {
     ],
   }
 
-  // Array of stat categories user can choose from.
+  // Array of stat categories user can choose from. Used to build Category Buttons
   categoryTitle = ["Rank", "Points For", "Points Against", "Expected Wins", "Luck", "H2H Luck"];
 
   // Do initial database call - all charts will use this info
@@ -160,7 +161,6 @@ class App extends Component {
 
     // Retrieve id of button to determine which function to call
     let id = event.target.id
-    console.log(id);
 
     // Category var holds category column to use from database
     let category = "";
@@ -214,7 +214,6 @@ class App extends Component {
 
   // Function that sets rank chart properties
   showRank = () => {
-    console.log("rank called");
     this.setState({
       chartType: "Rank",
       stepSize: 1,
@@ -224,7 +223,6 @@ class App extends Component {
   
   // Function that sets points for properties
   showPointsFor = () => {
-    console.log("points-for called");
     this.setState({
         chartType: "Points For",
         reverse: false,
@@ -234,7 +232,6 @@ class App extends Component {
   
   // Function that sets points against properties
   showPointsAgainst = () => {
-    console.log("points-against called");
     this.setState({
         chartType: "Points Against",
         reverse: false,
@@ -244,7 +241,6 @@ class App extends Component {
 
   // Function that sets expected wins properties
   showExpectedWins = () => {
-    console.log("expected wins called");
     this.setState({
       chartType: "Expected Wins",
       stepSize: .5,
@@ -253,7 +249,6 @@ class App extends Component {
   }
   // Function that sets luck properties
   showLuck = () => {
-    console.log("luck called");
     this.setState({
       chartType: "Luck",
       stepSize: .2,
@@ -262,7 +257,6 @@ class App extends Component {
   }
   // Function that sets H2H luck properties
   showH2HLuck = () => {
-    console.log("h2h luck called");
     this.setState({
       chartType: "H2H Luck",
       stepSize: .2,
@@ -276,10 +270,19 @@ class App extends Component {
         <h1 className="mt-2">LPH Pythagorean</h1>
         <Row className="justify-content-center mt-4">
           {this.categoryTitle.map(category => (
-            <CategoryButtons
-              onClickCategory={this.categoryClick}
-              id={category}
-            />
+            this.state.chartType === category ? (
+              <CategoryButtonActive 
+                onClickCategory={this.categoryClick}
+                id={category}
+                chartType={this.state.chartType}
+              />
+            ) : (
+              <CategoryButtons 
+                onClickCategory={this.categoryClick}
+                id={category}
+                chartType={this.state.chartType}
+              />
+            )
           ))}
         </Row>
         {/* Displays message until user chooses a stat option */}
@@ -290,7 +293,6 @@ class App extends Component {
           <Chart
             teamData={this.teamData}
             weeks={this.state.weeks}
-            titleText={this.state.chartType}
             stepSize={this.state.stepSize}
             reverse={this.state.reverse}
           />}
