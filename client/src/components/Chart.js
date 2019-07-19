@@ -3,7 +3,6 @@ import { Line } from 'react-chartjs-2';
 
 class Chart extends Component {      
     render() {
-        console.log(this.props.teamData)
         return (
             <div className="chart mt-3">
                 {this.props.reverse ? (
