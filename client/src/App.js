@@ -8,6 +8,7 @@ import CategoryButtonActive from './components/CategoryButtonActive';
 import HideButton from './components/HideButton';
 import ShowButton from './components/ShowButton';
 import DivisionButtons from './components/DivisionButtons';
+import DivisionButtonActive from './components/DivisionButtonActive';
 
 class App extends Component {
   constructor() {
@@ -351,11 +352,17 @@ class App extends Component {
 
             <div className="mt-3" />
             {this.divisions.map(division => (
-              <DivisionButtons
-                division={division}
-                onClick={this.divisionClick}
-                key={division}
-              />
+              this.state.division === division ? (
+                <DivisionButtonActive
+                  division={division}
+                  onClick={this.divisionClick}
+                  key={division}
+                />) : (
+                  <DivisionButtons
+                  division={division}
+                  onClick={this.divisionClick}
+                  key={division}
+                />)
             ))}
 
             <HideButton
