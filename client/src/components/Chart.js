@@ -5,7 +5,7 @@ class Chart extends Component {
     render() {
         return (
             <div className="chart mt-3">
-                {this.props.reverse ? (
+                {this.props.chartType === "Rank" ? (
                 <Line
                     data={this.props.teamData}
                     options={{
@@ -17,7 +17,7 @@ class Chart extends Component {
                             yAxes: [{
                                 ticks: {
                                     reverse: true,
-                                    stepSize: `${this.props.stepSize}`
+                                    stepSize: this.props.stepSize,
                                 },
                             }]
                         },
@@ -40,7 +40,7 @@ class Chart extends Component {
                             yAxes: [{
                                 ticks: {
                                     reverse: false,
-                                    stepSize: `${this.props.stepSize}`
+                                    stepSize: this.props.stepSize,
                                 },
                             }]
                         },
@@ -51,7 +51,8 @@ class Chart extends Component {
                             }
                         }
                     }}
-                /> )}
+                /> 
+                )}
             </div>
         )
     }

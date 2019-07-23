@@ -16,7 +16,7 @@ class App extends Component {
       initialData: [],
       weeks: 0,
       chartType: "",
-      division: "All",
+      division: "All Divisions",
       stepSize: 0,
       reverse: true,
       hidden: false,
@@ -25,7 +25,6 @@ class App extends Component {
 
   // Initial teams object, structured for ChartJS
   teams = {
-    labels: [],
     datasets: [
       {
         label: 'APG',
@@ -167,7 +166,7 @@ class App extends Component {
         const weeks = response.data.length / 16;
         // Add week numbers to chart label once data retrieved
         for (let i = 1; i <= weeks; i++) {
-          this.teams.labels.push(`Week ${i}`)
+          this.chartData.labels.push(`Week ${i}`)
         }
 
         // Save db data, weeks in state for further use
@@ -180,26 +179,52 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  // Function that is called when category button is clicked
+  // Function called when category button is clicked
   categoryClick = (event) => {
+    // Set state with button id of stat chosen
+    this.setState({
+      chartType: event.target.id
+    },
+      // Call function to filter chartData
+      this.chartDataFiltered
+    )
+  }
 
-    // Run for loop to empty previous data from teams
+  // Function called when division is chosen
+  divisionClick = (event) => {
+    // Make sure stat category/chartType has already been chosen. Otherwise no data will exist to display.
+    if (this.state.chartType) {
+      // Set state with division name from button id 
+      this.setState({
+        division: event.target.id
+      },
+        // Call function to filter chartData
+        this.chartDataFiltered
+      )
+    } else {
+      this.setState({
+        division: event.target.id
+      })
+    }
+  }
+
+  // Main function to filter database info already stored in state into desired ChartJs form.
+  chartDataFiltered = () => {
+    // Run for loop to empty previous data from teams object
     for (let i = 0; i < this.teams.datasets.length; i++) {
       this.teams.datasets[i].data = [];
     }
-
-    // Retrieve id of button to determine which function to call
-    let id = event.target.id
+    // Clear chartData of previous team info
+    this.chartData.datasets = [];
 
     // Category var holds category column to use from database
     let category = "";
 
     // Switch statement to determine which data to display and set state with chart properties
-    switch (id) {
+    switch (this.state.chartType) {
       case "Rank":
         category = "rank"
         this.setState({
-          chartType: "Rank",
           stepSize: 1,
           reverse: true,
         })
@@ -207,15 +232,13 @@ class App extends Component {
       case "Points For":
         category = "points_for"
         this.setState({
-          chartType: "Points For",
           reverse: false,
-          stepSize: 250
+          stepSize: 250,
         })
         break;
       case "Points Against":
         category = "points_against"
         this.setState({
-          chartType: "Points Against",
           reverse: false,
           stepSize: 250
         })
@@ -223,7 +246,6 @@ class App extends Component {
       case "Expected Wins":
         category = "expected_wins"
         this.setState({
-          chartType: "Expected Wins",
           stepSize: .5,
           reverse: false,
         })
@@ -231,7 +253,6 @@ class App extends Component {
       case "Luck":
         category = "luck"
         this.setState({
-          chartType: "Luck",
           stepSize: .2,
           reverse: false,
         })
@@ -239,16 +260,15 @@ class App extends Component {
       case "H2H Luck":
         category = "h2h_luck"
         this.setState({
-          chartType: "H2H Luck",
           stepSize: .2,
           reverse: false,
         })
         break;
       default:
-        break;
+        console.log("Switch statement error");
     }
 
-    // Start pushing databse info into teams
+    // Start pushing database info into teams
     // Set team and counter to 0
     let team = 0, counter = 0;
 
@@ -264,15 +284,10 @@ class App extends Component {
       counter++;
     }
 
-    // Push labels, team data into chartData object based on division filter
-    this.chartData.labels = this.teams.labels;
+    // Push team data into chartData object based on division filter
     for (let i = 0; i < this.teams.datasets.length; i++) {
-      console.log(i)
-      console.log(this.state.division);
-      console.log(this.teams.datasets[i].division)
-      if (this.state.division === this.teams.datasets[i].division || this.state.division === "All") {
+      if (this.state.division === this.teams.datasets[i].division || this.state.division === "All Divisions") {
         this.chartData.datasets.push(this.teams.datasets[i])
-        console.log("matched");
       }
     }
   }
@@ -314,7 +329,7 @@ class App extends Component {
                 teamData={this.chartData}
                 weeks={this.state.weeks}
                 stepSize={this.state.stepSize}
-                reverse={this.state.reverse}
+                chartType={this.state.chartType}
               />}
           </Col>
           <Col className="mt-4" xs="2">
@@ -338,6 +353,7 @@ class App extends Component {
             {this.divisions.map(division => (
               <DivisionButtons
                 division={division}
+                onClick={this.divisionClick}
                 key={division}
               />
             ))}
