@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import Chart from './components/Chart';
 import axios from 'axios';
+
 import './App.css';
+import Chart from './components/Chart';
+import RankChart from './components/RankChart';
 import CategoryButtons from './components/CategoryButtons';
 import CategoryButtonActive from './components/CategoryButtonActive';
 import HideButton from './components/HideButton';
@@ -325,13 +327,22 @@ class App extends Component {
             {!this.state.chartType &&
               <h3 className="mt-3">Choose a stat at the right to view</h3>
             }
-            {this.state.chartType &&
-              <Chart
-                teamData={this.chartData}
+            {this.state.chartType === "Rank" ? (
+              <RankChart
+                chartData={this.chartData}
                 weeks={this.state.weeks}
                 stepSize={this.state.stepSize}
                 chartType={this.state.chartType}
-              />}
+              />
+            ) : (
+                this.state.chartType &&
+                <Chart
+                  chartData={this.chartData}
+                  weeks={this.state.weeks}
+                  stepSize={this.state.stepSize}
+                  chartType={this.state.chartType}
+                />
+              )}
           </Col>
           <Col className="mt-4" xs="2">
             {this.categoryTitle.map(category => (
@@ -359,10 +370,10 @@ class App extends Component {
                   key={division}
                 />) : (
                   <DivisionButtons
-                  division={division}
-                  onClick={this.divisionClick}
-                  key={division}
-                />)
+                    division={division}
+                    onClick={this.divisionClick}
+                    key={division}
+                  />)
             ))}
 
             <HideButton

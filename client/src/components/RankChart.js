@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 
-class Chart extends Component {
+class RankChart extends Component {      
     render() {
         return (
             <div className="chart mt-3">
@@ -15,7 +15,7 @@ class Chart extends Component {
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    reverse: false,
+                                    reverse: true,
                                     stepSize: this.props.stepSize,
                                 },
                             }]
@@ -28,10 +28,9 @@ class Chart extends Component {
                         }
                     }}
                 />
-                )}
             </div>
         )
     }
 }
 
-export default Chart;
+export default RankChart;
