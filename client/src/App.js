@@ -236,14 +236,14 @@ class App extends Component {
         category = "points_for"
         this.setState({
           reverse: false,
-          stepSize: 250,
+          stepSize: 500,
         })
         break;
       case "Points Against":
         category = "points_against"
         this.setState({
           reverse: false,
-          stepSize: 250
+          stepSize: 500
         })
         break;
       case "Expected Wins":
@@ -256,14 +256,14 @@ class App extends Component {
       case "Luck":
         category = "luck"
         this.setState({
-          stepSize: .2,
+          stepSize: .3,
           reverse: false,
         })
         break;
       case "H2H Luck":
         category = "h2h_luck"
         this.setState({
-          stepSize: .2,
+          stepSize: .3,
           reverse: false,
         })
         break;
