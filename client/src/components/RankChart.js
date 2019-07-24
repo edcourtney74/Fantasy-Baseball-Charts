@@ -17,6 +17,8 @@ class RankChart extends Component {
                                 ticks: {
                                     reverse: true,
                                     stepSize: this.props.stepSize,
+                                    min: 1,
+                                    max: 16
                                 },
                             }]
                         },
