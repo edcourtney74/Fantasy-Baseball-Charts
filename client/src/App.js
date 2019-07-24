@@ -6,11 +6,9 @@ import './App.css';
 import Chart from './components/Chart';
 import RankChart from './components/RankChart';
 import CategoryButtons from './components/CategoryButtons';
-import CategoryButtonActive from './components/CategoryButtonActive';
 import HideButton from './components/HideButton';
 import ShowButton from './components/ShowButton';
 import DivisionButtons from './components/DivisionButtons';
-import DivisionButtonActive from './components/DivisionButtonActive';
 
 class App extends Component {
   constructor() {
@@ -165,8 +163,8 @@ class App extends Component {
   getChartData = () => {
     axios.get('/api/stats')
       .then(response => {
-        // Calculate number of weeks of data retrieved - number of records divided by number of teams (16)
-        const weeks = response.data.length / 16;
+        // Calculate number of weeks of data retrieved - number of records divided by number of teams
+        const weeks = response.data.length / this.teams.datasets.length;
         // Add week numbers to chart label once data retrieved
         for (let i = 1; i <= weeks; i++) {
           this.chartData.labels.push(`Week ${i}`)
@@ -188,20 +186,20 @@ class App extends Component {
     this.setState({
       chartType: event.target.id
     },
-      // Call function to filter chartData
+      // Will call function to filter chartData once state is set
       this.chartDataFiltered
     )
   }
 
   // Function called when division is chosen
   divisionClick = (event) => {
-    // Make sure stat category/chartType has already been chosen. Otherwise no data will exist to display.
+    // Makes sure stat category/chartType has already been chosen. Otherwise no data will exist to display. If user selects division first, no data will display until category has been chosen.
     if (this.state.chartType) {
       // Set state with division name from button id 
       this.setState({
         division: event.target.id
       },
-        // Call function to filter chartData
+        // Will call function to filter chartData once state is set
         this.chartDataFiltered
       )
     } else {
@@ -229,20 +227,17 @@ class App extends Component {
         category = "rank"
         this.setState({
           stepSize: 1,
-          reverse: true,
         })
         break;
       case "Points For":
         category = "points_for"
         this.setState({
-          reverse: false,
           stepSize: 500,
         })
         break;
       case "Points Against":
         category = "points_against"
         this.setState({
-          reverse: false,
           stepSize: 500
         })
         break;
@@ -250,34 +245,31 @@ class App extends Component {
         category = "expected_wins"
         this.setState({
           stepSize: .5,
-          reverse: false,
         })
         break;
       case "Luck":
         category = "luck"
         this.setState({
           stepSize: .3,
-          reverse: false,
         })
         break;
       case "H2H Luck":
         category = "h2h_luck"
         this.setState({
           stepSize: .3,
-          reverse: false,
         })
         break;
       default:
         console.log("Switch statement error");
     }
 
-    // Start pushing database info into teams
+    // Start pushing database info into teams object
     // Set team and counter to 0
     let team = 0, counter = 0;
 
     // For loop goes through each database record
     for (let i = 0; i < this.state.initialData.length; i++) {
-      // Records are groups alphabetically by team, so the first team's records will all be in a row. So we need to keep a counter to check when it's time to move to the next team. Once the counter is greater than the number of weeks in the data, we know it's time to move on. Add one to the team counter and reset the other counter.
+      // Records are grouped alphabetically by team, so the first team's records will all be in a row. So we need to keep a counter to check when it's time to move to the next team. Once the counter is greater than the number of weeks in the data, we know it's time to move on. Add one to the team counter and reset the other counter.
       if (counter >= this.state.weeks) {
         team++;
         counter = 0;
@@ -346,35 +338,23 @@ class App extends Component {
           </Col>
           <Col className="mt-4" xs="2">
             {this.categoryTitle.map(category => (
-              this.state.chartType === category ? (
-                <CategoryButtonActive
-                  onClickCategory={this.categoryClick}
-                  id={category}
-                  chartType={this.state.chartType}
-                  key={category}
-                />) : (
-                  <CategoryButtons
-                    onClickCategory={this.categoryClick}
-                    id={category}
-                    chartType={this.state.chartType}
-                    key={category}
-                  />)
-            ))}
+              <CategoryButtons
+                onClickCategory={this.categoryClick}
+                id={category}
+                chartType={this.state.chartType}
+                key={category}
+              />)
+            )}
 
             <div className="mt-3" />
             {this.divisions.map(division => (
-              this.state.division === division ? (
-                <DivisionButtonActive
-                  division={division}
-                  onClick={this.divisionClick}
-                  key={division}
-                />) : (
                   <DivisionButtons
-                    division={division}
+                    division={this.state.division}
+                    id={division}
                     onClick={this.divisionClick}
                     key={division}
                   />)
-            ))}
+            )}
 
             <HideButton
               onClickHideAll={this.hideAll}
