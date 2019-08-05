@@ -211,10 +211,9 @@ class App extends Component {
 
   // Main function to filter database info already stored in state into desired ChartJs form.
   chartDataFiltered = () => {
-    // Run for loop to empty previous data from teams object
-    for (let i = 0; i < this.teams.datasets.length; i++) {
-      this.teams.datasets[i].data = [];
-    }
+    // Use forEach to empty previous data from teams object
+    this.teams.datasets.forEach(dataset => dataset.data = []);
+
     // Clear chartData of previous team info
     this.chartData.datasets = [];
 
@@ -267,32 +266,32 @@ class App extends Component {
     // Set team and counter to 0
     let team = 0, counter = 0;
 
-    // For loop goes through each database record
-    for (let i = 0; i < this.state.initialData.length; i++) {
+    // Use forEach to go through each database record
+    this.state.initialData.forEach(record => {
       // Records are grouped alphabetically by team, so the first team's records will all be in a row. So we need to keep a counter to check when it's time to move to the next team. Once the counter is greater than the number of weeks in the data, we know it's time to move on. Add one to the team counter and reset the other counter.
       if (counter >= this.state.weeks) {
         team++;
         counter = 0;
       }
       // Push the data from the record into the team's data. Advance the counter. 
-      this.teams.datasets[team].data.push(this.state.initialData[i][category]);
+      this.teams.datasets[team].data.push(record[category]);
       counter++;
-    }
+    })
 
     // Push team data into chartData object based on division filter
-    for (let i = 0; i < this.teams.datasets.length; i++) {
-      if (this.state.division === this.teams.datasets[i].division || this.state.division === "All Divisions") {
-        this.chartData.datasets.push(this.teams.datasets[i])
+    this.teams.datasets.forEach(dataset => {
+      if (this.state.division === dataset.division || this.state.division === "All Divisions") {
+        this.chartData.datasets.push(dataset);
       }
-    }
+    })
   }
 
   // Function to hide all current data so user can focus on just a few teams
   hideAll = () => {
-    // Use a for loop to add hidden: true property to each team's dataset
-    for (let i = 0; i < this.teams.datasets.length; i++) {
-      this.teams.datasets[i].hidden = true;
-    }
+    // Use forEach to add hidden: true property to each team's dataset
+    this.teams.datasets.forEach(dataset => {
+      dataset.hidden = true;
+    }) 
     this.setState({
       hidden: true
     })
@@ -300,10 +299,10 @@ class App extends Component {
 
   // Function to show all current data so user can all teams again. This
   showAll = () => {
-    // Use a for loop to add hidden: false property to each team's dataset
-    for (let i = 0; i < this.teams.datasets.length; i++) {
-      this.teams.datasets[i].hidden = false;
-    }
+    // Use forEach to add hidden: true property to each team's dataset
+    this.teams.datasets.forEach(dataset => {
+      dataset.hidden = false;
+    }) 
     this.setState({
       hidden: false
     })
@@ -348,12 +347,12 @@ class App extends Component {
 
             <div className="mt-3" />
             {this.divisions.map(division => (
-                  <DivisionButtons
-                    division={this.state.division}
-                    id={division}
-                    onClick={this.divisionClick}
-                    key={division}
-                  />)
+              <DivisionButtons
+                division={this.state.division}
+                id={division}
+                onClick={this.divisionClick}
+                key={division}
+              />)
             )}
 
             <HideButton
