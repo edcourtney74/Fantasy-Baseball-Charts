@@ -149,7 +149,7 @@ class App extends Component {
   }
 
   // Array of stat categories user can choose from. Used to build Category Buttons
-  categoryTitle = ["Rank", "Points For", "Points Against", "Expected Wins", "Luck", "H2H Luck"];
+  categoryTitle = ["Rank", "Points For", "Points Against", "Expected Wins", "Luck", "H2H Luck", "Points For (week)", "Points Against (week)"];
 
   // Array of divisions user can choose from. Used to build Division Buttons
   divisions = ["BlueMoon", "Bud", "Lagun", "MilBest", "All Divisions"];
@@ -258,6 +258,18 @@ class App extends Component {
           stepSize: .3,
         })
         break;
+        case "Points For (week)":
+        category = "points_for_week"
+        this.setState({
+          stepSize: 25,
+        })
+        break;
+      case "Points Against (week)":
+        category = "points_against_week"
+        this.setState({
+          stepSize: 25
+        })
+        break;
       default:
         console.log("Switch statement error");
     }
@@ -284,7 +296,9 @@ class App extends Component {
         this.chartData.datasets.push(dataset);
       }
     })
+    console.log(this.teams);
   }
+
 
   // Function to hide all current data so user can focus on just a few teams
   hideAll = () => {

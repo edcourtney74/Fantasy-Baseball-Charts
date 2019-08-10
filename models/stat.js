@@ -37,6 +37,14 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
+        points_for_week: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        points_against_week: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
     }, {
             freezeTableName: true,
             timestamps: false
